@@ -17,6 +17,15 @@ map.on('load', function () {
 
     });
 
+    map.addSource('parcels', {
+       type: 'vector',
+       url: 'mapbox://slusarskiddetroitmi.cwobdjn0'
+     });
+
+     map.addSource('walls', {
+        type: 'vector',
+        url: 'mapbox://slusarskiddetroitmi.3cbahynf'
+      });
 
 
     map.addLayer({
@@ -35,7 +44,7 @@ map.on('load', function () {
     map.addLayer({
         'id': 'photos-mapillary-node',
         'type': 'circle',
-        'source': 'photos-mapillary',
+        'source': 'photos-mapillary',minzoom: 17.5,
         'layout': {
             'visibility': 'visible'
         },
@@ -45,12 +54,50 @@ map.on('load', function () {
         }
     });
 
+    map.addLayer({
+   "id": "parcel-line",
+   "type": "line",
+   "source": "parcels", minzoom: 15.5,
+   "layout": {
+   },
+   "paint": {
+        "line-color":"#cbcbcb",
+   },
+   'source-layer': 'parcelsgeojson'
+});
+
+map.addLayer({
+"id": "walls",
+"type": "line",
+"source": "walls", minzoom: 13,
+"layout": {
+},
+"paint": {
+  "line-width": 4,
+    "line-color":"#FF530D",
+},
+'source-layer': 'walls-0u9rhx'
 
 
-    });
 
-    var mly = new Mapillary.Viewer(
-                'mly',
-                // Replace this with your own client ID from mapillary.com
-                '=WGl5Z2dkVHEydGMwWlNMOHUzVHR4QToyMmQ4OTRjYzczZWFiYWVi',
-                'Eoh1EMfmCjIn1UlMcPSoFg');
+});
+
+document.getElementById('side-bar').addEventListener('click', function() {
+
+     // Geographic coordinates of the LineString
+     var coordinates = photos-mapillary.features[0].geometry.coordinates;
+
+     // Pass the first coordinates in the LineString to `lngLatBounds` &
+     // wrap each coordinate pair in `extend` to include them in the bounds
+     // result. A variation of this technique could be applied to zooming
+     // to the bounds of multiple Points or Polygon geomteries - it just
+     // requires wrapping all the coordinates with the extend method.
+     var bounds = coordinates.reduce(function(bounds, coord) {
+         return bounds.extend(coord);
+     }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+
+     map.fitBounds(bounds, {
+         padding: 20
+     });
+ });
+});
