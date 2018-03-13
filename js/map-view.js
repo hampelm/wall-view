@@ -6,16 +6,32 @@ var map = new mapboxgl.Map({
     zoom: 14.6 // starting zoom
 });
 
+var markerSource = {
+  type: "geojson",
+  data: {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [-83.0485, 42.341]
+    },
+    properties: {}
+  }
+};
+
 let photos = "https://a.mapillary.com/v3/sequences?client_id=WGl5Z2dkVHEydGMwWlNMOHUzVHR4QToyMmQ4OTRjYzczZWFiYWVi&start_time=2018-03-01&end_time=2018-03-11&bbox=-83.06530952453613,42.323048176081876,-83.03157806396484,42.343320316410804"
 
+map.on('style.load', function(){
+  map.addSource("markers", markerSource);
+  map.addLayer({
+    id: "markers",
+    type: "symbol",
+    source: "markers",
+    layout: {
+      "icon-image": "car-15"
+    }
+});
 
-map.on('load', function () {
-    map.addSource('photos-mapillary', {
-        type: 'geojson',
-        data:photos,
-
-
-    });
+var marker;
 
     map.addSource('parcels', {
        type: 'vector',
@@ -54,6 +70,18 @@ map.on('load', function () {
         }
     });
 
+    map.on('style.load', function(){
+  map.addSource("markers", markerSource);
+  map.addLayer({
+    id: "markers",
+    type: "symbol",
+    source: "markers",
+    layout: {
+      "icon-image": "car-15"
+    }
+  });
+  });
+
     map.addLayer({
    "id": "parcel-line",
    "type": "line",
@@ -78,9 +106,9 @@ map.addLayer({
 },
 'source-layer': 'walls-0u9rhx'
 
-
-
 });
+
+
 
 var mly = new Mapillary.Viewer(
             'side-bar',
@@ -99,3 +127,10 @@ var mly = new Mapillary.Viewer(
        // Viewer size is dynamic so resize should be called every time the window size changes
        window.addEventListener("resize", function() { mly.resize(); });
 });
+
+
+mly.on(
+            Mapillary.Viewer.nodechanged,
+            function(node) {
+                console.log('current node:', node.key);
+            });
