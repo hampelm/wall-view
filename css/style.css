@@ -40,8 +40,8 @@ width:100%;
 
 #side-bar {
   position: absolute;
-height: 20vh;
- width: 25em;
+height: 50vh;
+ width: 50em;
  background-color: #fff;  z-index: 10;}
 
 #map {

@@ -82,22 +82,20 @@ map.addLayer({
 
 });
 
-document.getElementById('side-bar').addEventListener('click', function() {
+var mly = new Mapillary.Viewer(
+            'side-bar',
+            // Replace this with your own client ID from mapillary.com
+            'WGl5Z2dkVHEydGMwWlNMOHUzVHR4QToyMmQ4OTRjYzczZWFiYWVi',
+            null);
 
-     // Geographic coordinates of the LineString
-     var coordinates = photos-mapillary.features[0].geometry.coordinates;
+            var lat = 42.341;
+       var lon = -83.0485;
 
-     // Pass the first coordinates in the LineString to `lngLatBounds` &
-     // wrap each coordinate pair in `extend` to include them in the bounds
-     // result. A variation of this technique could be applied to zooming
-     // to the bounds of multiple Points or Polygon geomteries - it just
-     // requires wrapping all the coordinates with the extend method.
-     var bounds = coordinates.reduce(function(bounds, coord) {
-         return bounds.extend(coord);
-     }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+       mly.moveCloseTo(lat, lon)
+           .then(
+               function(node) { console.log(node.key); },
+               function(error) { console.error(error); });
 
-     map.fitBounds(bounds, {
-         padding: 20
-     });
- });
+       // Viewer size is dynamic so resize should be called every time the window size changes
+       window.addEventListener("resize", function() { mly.resize(); });
 });
