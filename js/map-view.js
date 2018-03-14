@@ -18,8 +18,6 @@ var markerSource = {
   }
 };
 
-let photos = "https://a.mapillary.com/v3/sequences?client_id=WGl5Z2dkVHEydGMwWlNMOHUzVHR4QToyMmQ4OTRjYzczZWFiYWVi&start_time=2018-03-01&end_time=2018-03-11&bbox=-83.06530952453613,42.323048176081876,-83.03157806396484,42.343320316410804"
-
 map.on('style.load', function(){
   map.addSource("markers", markerSource);
   map.addLayer({
@@ -31,7 +29,18 @@ map.on('style.load', function(){
     }
 });
 
-var marker;
+
+
+let photos = "https://a.mapillary.com/v3/sequences?client_id=WGl5Z2dkVHEydGMwWlNMOHUzVHR4QToyMmQ4OTRjYzczZWFiYWVi&start_time=2018-03-01&end_time=2018-03-11&bbox=-83.06530952453613,42.323048176081876,-83.03157806396484,42.343320316410804"
+let mapillaryphotos = null
+
+
+
+
+fetch(photos).then(response => {return response.json()}).then(data => {console.log(data); mapillaryphotos=data})
+
+
+
 
     map.addSource('parcels', {
        type: 'vector',
@@ -44,12 +53,17 @@ var marker;
       });
 
       map.addSource('photos-mapillary', {
-         type: 'vector',
-         source:photos
-       });
+            type: 'geojson',
+             data:photos,
 
 
-    map.addLayer({
+         });
+
+
+
+
+
+   map.addLayer({
         'id': 'photos-mapillary',
         'type': 'line',
         'source': 'photos-mapillary',
@@ -62,6 +76,7 @@ var marker;
         }
     });
 
+
     map.addLayer({
         'id': 'photos-mapillary-node',
         'type': 'circle',
@@ -70,7 +85,7 @@ var marker;
             'visibility': 'visible'
         },
         'paint': {
-            'circle-radius': 5,
+            'circle-radius': 10,
             'circle-color': '#E80C7A'
         }
     });
@@ -115,25 +130,61 @@ map.addLayer({
 
 
 
+
+
+
+
+
+
+
+
+
+            var lat = 42.335205503079514;
+       var lon =  -83.041872382164;
+
+
+
+
+
+
+       // Viewer size is dynamic so resize should be called every time the window size changes
+       window.addEventListener("resize", function() { mly.resize(); });
+});
 var mly = new Mapillary.Viewer(
             'side-bar',
             // Replace this with your own client ID from mapillary.com
             'WGl5Z2dkVHEydGMwWlNMOHUzVHR4QToyMmQ4OTRjYzczZWFiYWVi',
             null,
           );
+map.on('click', function(e) {
+    console.log(e);
+    var closeto ="https://a.mapillary.com/v3/images?closeto="+e.lngLat.lng+","+e.lngLat.lat+"&client_id=WGl5Z2dkVHEydGMwWlNMOHUzVHR4QToyMmQ4OTRjYzczZWFiYWVi&start_time=2018-03-01&end_time=2018-03-11&usernames=dexterslu";
+    console.log(closeto);
+    fetch(closeto)
+ .then(response => {return response.json()})
+ .then(data => {
+   console.log(data);
+   let mapillaryphotos = data;
+   let mapillary_keys = mapillaryphotos.features[0].properties.key;
+   console.log(mapillary_keys);
 
 
-            var lat = 42.335205503079514;
-       var lon =  -83.041872382164;
-
-mly.setFilter(["==", "sequenceKey", "UJYfRAWBgygvLFQJpS6-NA"]);
-
-       mly.moveCloseTo(lat, lon)
-           .then(
-               function(node) { console.log(node.key); },
-               function(error) { console.error(error); });
 
 
-       // Viewer size is dynamic so resize should be called every time the window size changes
-       window.addEventListener("resize", function() { mly.resize(); });
+   mly = new Mapillary.Viewer(
+              'side-bar',
+              // Replace this with your own client ID from mapillary.com
+              'WGl5Z2dkVHEydGMwWlNMOHUzVHR4QToyMmQ4OTRjYzczZWFiYWVi',
+              null,
+            );
+
+            mly.moveToKey(mapillary_keys)
+                .then(
+                    function(node) { console.log(node.key); },
+                    function(error) { console.error(error); });
+ });
+
+
+
+
 });
