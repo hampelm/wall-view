@@ -129,22 +129,8 @@ map.addLayer({
 });
 
 
-
-
-
-
-
-
-
-
-
-
             var lat = 42.335205503079514;
        var lon =  -83.041872382164;
-
-
-
-
 
 
        // Viewer size is dynamic so resize should be called every time the window size changes
@@ -171,12 +157,6 @@ map.on('click', function(e) {
 
 
 
-   mly = new Mapillary.Viewer(
-              'side-bar',
-              // Replace this with your own client ID from mapillary.com
-              'WGl5Z2dkVHEydGMwWlNMOHUzVHR4QToyMmQ4OTRjYzczZWFiYWVi',
-              null,
-            );
 
             mly.moveToKey(mapillary_keys)
                 .then(
