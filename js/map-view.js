@@ -43,6 +43,11 @@ var marker;
         url: 'mapbox://slusarskiddetroitmi.3cbahynf'
       });
 
+      map.addSource('photos-mapillary', {
+         type: 'vector',
+         source:photos
+       });
+
 
     map.addLayer({
         'id': 'photos-mapillary',
@@ -114,23 +119,21 @@ var mly = new Mapillary.Viewer(
             'side-bar',
             // Replace this with your own client ID from mapillary.com
             'WGl5Z2dkVHEydGMwWlNMOHUzVHR4QToyMmQ4OTRjYzczZWFiYWVi',
-            null);
+            null,
+          );
 
-            var lat = 42.341;
-       var lon = -83.0485;
+
+            var lat = 42.335205503079514;
+       var lon =  -83.041872382164;
+
+mly.setFilter(["==", "sequenceKey", "UJYfRAWBgygvLFQJpS6-NA"]);
 
        mly.moveCloseTo(lat, lon)
            .then(
                function(node) { console.log(node.key); },
                function(error) { console.error(error); });
 
+
        // Viewer size is dynamic so resize should be called every time the window size changes
        window.addEventListener("resize", function() { mly.resize(); });
 });
-
-
-mly.on(
-            Mapillary.Viewer.nodechanged,
-            function(node) {
-                console.log('current node:', node.key);
-            });

@@ -7,7 +7,9 @@
 
 body, html {
   background: #004544;
-  height:80vh;
+  height:100vh;
+  padding:0;
+  margin:0;
 }
 
 .nav {
@@ -29,22 +31,25 @@ body, html {
 
 .nav #wall-view {
   order:2;
-  padding-left: 10px;
+
   flex-grow: 1;
   align-self:center;
 }
 
 .content {
 width:100%;
+display:flex;
 }
 
 #side-bar {
-  position: absolute;
-height: 30vh;
- width: 30em;
- background-color: #fff;  z-index: 10;}
+  order: 1;
+
+height: 100vh;
+ width: 50em;
+ background-color: #fff; }
 
 #map {
+  order:2;
   width:100%;
   height:80em;
 
