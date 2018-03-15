@@ -146,6 +146,12 @@ map.addLayer({
 'source-layer': 'walls-0u9rhx'
 
 });
+  map.on("mousemove", function(e) {
+    var features = map.queryRenderedFeatures(e.point, {
+      layers: ["walls"]
+    });
+    map.getCanvas().style.cursor = features.length ? "pointer" : "";
+  });
 
 map.on('load', function() {
     // Insert the layer beneath any symbol layer.
