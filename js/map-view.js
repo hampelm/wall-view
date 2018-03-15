@@ -1,7 +1,7 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2x1c2Fyc2tpZGRldHJvaXRtaSIsImEiOiJjaXZsNXlwcXQwYnY5MnlsYml4NTJ2Mno4In0.8wKUnlMPIlxq-eWH0d10-Q';
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/slusarskiddetroitmi/cjenih7pg7acz2sp92y78jyuy', // stylesheet location
+    style: 'mapbox://styles/slusarskiddetroitmi/cj2m1f9k400132rmr1jhjq2gn', // stylesheet location
     center: [-83.050,42.336], // starting position [lng, lat]
     zoom: 14.6 // starting zoom
 });
@@ -60,7 +60,10 @@ fetch(photos).then(response => {return response.json()}).then(data => {console.l
          });
 
 
-
+         map.addSource('historic-districts', {
+            type: 'vector',
+            url: 'mapbox://slusarskiddetroitmi.59hai881'
+          });
 
 
    map.addLayer({
@@ -71,7 +74,7 @@ fetch(photos).then(response => {return response.json()}).then(data => {console.l
             'visibility': 'visible'
         },
         'paint': {
-            'line-width': 3,
+            'line-width': 1,
             "line-color": "#39ff14"
         }
     });
@@ -82,7 +85,7 @@ fetch(photos).then(response => {return response.json()}).then(data => {console.l
         'type': 'circle',
         'source': 'photos-mapillary',minzoom: 17.5,
         'layout': {
-            'visibility': 'visible'
+            'visibility': 'false'
         },
         'paint': {
             'circle-radius': 10,
@@ -112,6 +115,19 @@ fetch(photos).then(response => {return response.json()}).then(data => {console.l
         "line-color":"#cbcbcb",
    },
    'source-layer': 'parcelsgeojson'
+});
+
+
+map.addLayer({
+"id": "historic-district-lines",
+"type": "line",
+"source": "historic-districts", minzoom: 13.5,
+"layout": {
+},
+"paint": {
+    "line-color":"#A90CE8",
+},
+'source-layer': 'LocHistDist-duxeoh'
 });
 
 map.addLayer({
