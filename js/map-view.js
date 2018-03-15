@@ -1,9 +1,12 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2x1c2Fyc2tpZGRldHJvaXRtaSIsImEiOiJjaXZsNXlwcXQwYnY5MnlsYml4NTJ2Mno4In0.8wKUnlMPIlxq-eWH0d10-Q';
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/slusarskiddetroitmi/cj2m1f9k400132rmr1jhjq2gn', // stylesheet location
+    style: 'mapbox://styles/mapbox/light-v9', // stylesheet location
     center: [-83.050,42.336], // starting position [lng, lat]
-    zoom: 14.6 // starting zoom
+    zoom: 14.6, // starting zoom
+    pitch: 45,
+bearing: -17.6,
+hash: true
 });
 
 var markerSource = {
@@ -143,6 +146,47 @@ map.addLayer({
 'source-layer': 'walls-0u9rhx'
 
 });
+
+map.on('load', function() {
+    // Insert the layer beneath any symbol layer.
+    var layers = map.getStyle().layers;
+
+    var labelLayerId;
+    for (var i = 0; i < layers.length; i++) {
+        if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+            labelLayerId = layers[i].id;
+            break;
+        }
+    }
+
+
+map.addLayer({
+      'id': '3d-buildings',
+      'source': 'composite',
+      'source-layer': 'building',
+      'filter': ['==', 'extrude', 'true'],
+      'type': 'fill-extrusion',
+      'minzoom': 15,
+      'paint': {
+          'fill-extrusion-color': '#aaa',
+
+          // use an 'interpolate' expression to add a smooth transition effect to the
+          // buildings as the user zooms in
+          'fill-extrusion-height': [
+              "interpolate", ["linear"], ["zoom"],
+              15, 0,
+              15.05, ["get", "height"]
+          ],
+          'fill-extrusion-base': [
+              "interpolate", ["linear"], ["zoom"],
+              15, 0,
+              15.05, ["get", "min_height"]
+          ],
+          'fill-extrusion-opacity': .6
+      }
+  }, labelLayerId);
+});
+
 
 
             var lat = 42.335205503079514;
